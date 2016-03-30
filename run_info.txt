@@ -1,7 +1,7 @@
 Command line: ./bamm -c myControlFile.txt
 Git commit id: 462bc39af9d4c4b4dd81a481f32c953e93a076e7
-Random seed: 1459349702
-Start time: Wed Mar 30 10:55:02 2016
+Random seed: 1459350760
+Start time: Wed Mar 30 11:12:40 2016
 
 Current parameter settings:
        acceptanceInfoFileName    acceptance_info.txt
@@ -69,7 +69,7 @@ fastSimulatePrior_Generations    5000000
                     segLength    0.02
           simulatePriorShifts    1
                    swapPeriod    1000
-                     treefile    Euc.final.dated.tre
+                     treefile    Euc.final.dated.noNit.tre
      updateEventLocationScale    0.05
          updateEventRateScale    4.0
         updateLambdaInitScale    2.0
@@ -90,5 +90,5 @@ updateRateEventNumberForBranch    0.0
  useGlobalSamplingProbability    1
    validateEventConfiguration    0
    writeMeanBranchLengthTrees    0
-End time: Wed Mar 30 10:55:05 2016
+End time: Wed Mar 30 11:12:43 2016
 

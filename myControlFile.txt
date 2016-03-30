@@ -16,7 +16,7 @@
 modeltype = speciationextinction        
 # Specify "speciationextinction" or "trait" analysis
                                   
-treefile = Euc.final.dated.tre
+treefile = Euc.final.dated.noNit.tre
 # File name of the phylogenetic tree to be analyzed
 
 runInfoFilename = run_info.txt
