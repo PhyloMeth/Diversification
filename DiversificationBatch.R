@@ -17,7 +17,7 @@ focal.clade <- tips(tree,node=58)
 ntax.focal.clade <- length(focal.clade)
 sister.clade <- tips(tree,node=49)
 ntax.sister.clade <- length(sister.clade)
-depth.both <- findMRCA(tree,tips=c(ntax.focal.clade,ntax.sister.clade)) #time of the MRCA
+depth.both <- findMRCA(tree,tips=c(focal.clade,sister.clade)) #time of the MRCA
 actual.ratio <- min(c(ntax.focal.clade, ntax.sister.clade)) / max(c(ntax.focal.clade, ntax.sister.clade))
 
 estimated.div.rate <- log(ntax.focal.clade + ntax.sister.clade)/depth.both #N(t) = N0 * exp(r*t)
@@ -39,7 +39,7 @@ abline(v=actual.ratio, col="red")
 #So, what does this mean about your observed result? What's the p-value?
 # Well, the simulated results are really messy and don't follow the shape of a
 # typical distribution. Probably because of my tree size. The p value would be 
-# 0.5451.
+# 0.5314.
 
 #Now, try fitting different models for diversification.
 div.results <- TryMultipleDivModels(tree)
