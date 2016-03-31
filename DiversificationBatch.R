@@ -11,17 +11,17 @@ continuous.data<-cbind(latitude,height)
 rownames(continuous.data)<-tree$tip.label
 
 #First, let's look at a sister group comparison. Imagine you have one clade you think is especially noteworthy. 
-tree$node.labels=c(1:tree$Nnode)
+makeNodeLabel(tree,method="number")
 
 plot(tree,cex=0.5)
 nodelabels(tree$node.labels,cex=0.4)
 
 
-focal.clade<-tips(tree,node=1)
+focal.clade<-tips(tree,node=255) # only giving me one species?
 ntax.focal.clade <- length(focal.clade)
-sister.clade<-tips(tree,node=1)
+sister.clade<-tips(tree,node=130) # same here, only one species
 ntax.sister.clade <- length(sister.clade)
-depth.both <- findMRCA(tree,tips=c(ntax.focal.clade,ntax.sister.clade)) #time of the MRCA
+depth.both <- findMRCA(tree,tips=c(focal.clade,sister.clade)) #time of the MRCA
 actual.ratio <- min(c(ntax.focal.clade, ntax.sister.clade)) / max(c(ntax.focal.clade, ntax.sister.clade))
 
 estimated.div.rate <- log(ntax.focal.clade + ntax.sister.clade)/depth.both #N(t) = N0 * exp(r*t)
@@ -43,9 +43,11 @@ abline(v=actual.ratio, col="red")
 #So, what does this mean about your observed result? What's the p-value?
 
 #Now, try fitting different models for diversification.
-div.results <- TryMultipleDivModels(tree)
+ultrametric.tree<-chronos(tree,lambda=0)
 
-best.model <- __________________
+div.results <- TryMultipleDivModels(ultrametric.tree)
+
+best.model <- div.results[div.results[[5]]==0][1]#indexed lowest AIC (0). 5 is in double brackets because it's in double brackets in div.results
 
 # What are the parameters of the best model? What do you think they mean?
 
