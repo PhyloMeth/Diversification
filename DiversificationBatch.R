@@ -1,12 +1,27 @@
 #You can use code you wrote for the correlation exercise here.
 source("DiversificationFunctions.R")
-tree <- read.tree("____PATH_TO_TREE_OR_SOME_OTHER_WAY_OF_GETTING_A_TREE____")
+tree <- get_study_tree("pg_2346","tree4944")
+plot(tree,cex=0.3)
+discrete.data <- as.matrix(read.csv(file="/Users/Hailee/Desktop/taxa.csv", stringsAsFactors=FALSE,row.names=NULL))#death to factors.
+discrete.data2 <- as.matrix(read.csv(file="/Users/Hailee/Desktop/taxa.csv", stringsAsFactors=FALSE,row.names=1))#death to factors.
+
+latitude<- rnorm(128,mean=89,sd=0.5)
+height<-rnorm(128,mean=2,sd=0.5)
+continuous.data<-cbind(latitude,height)
+rownames(continuous.data)<-tree$tip.label
 
 #First, let's look at a sister group comparison. Imagine you have one clade you think is especially noteworthy. 
+tree$node.labels=c(1:tree$Nnode)
 
-ntax.focal.clade <- ___________________
-ntax.sister.clade <- __________________
-depth.both <- ____________ #time of the MRCA
+plot(tree,cex=0.5)
+nodelabels(tree$node.labels,cex=0.4)
+
+
+focal.clade<-tips(tree,node=1)
+ntax.focal.clade <- length(focal.clade)
+sister.clade<-tips(tree,node=1)
+ntax.sister.clade <- length(sister.clade)
+depth.both <- findMRCA(tree,tips=c(ntax.focal.clade,ntax.sister.clade)) #time of the MRCA
 actual.ratio <- min(c(ntax.focal.clade, ntax.sister.clade)) / max(c(ntax.focal.clade, ntax.sister.clade))
 
 estimated.div.rate <- log(ntax.focal.clade + ntax.sister.clade)/depth.both #N(t) = N0 * exp(r*t)
