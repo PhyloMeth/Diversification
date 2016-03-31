@@ -2,6 +2,7 @@ library(ape)
 library(geiger) 
 library(laser)
 library(phytools)
+library(phangorn)
 
 TryMultipleDivModels <- function(tree) {
 	tree.branching <- getBtimes(string=write.tree(tree))
@@ -9,8 +10,8 @@ TryMultipleDivModels <- function(tree) {
 	bd.result <- bd(tree.branching)
 	ddl.result <- DDL(tree.branching)
 	AIC.vector <- c(yule.result$aic, bd.result$aic, ddl.result$aic)
-	deltaAIC.vector <- ________________
-	AkaikeWeight.vector <- ______________
-	result.list <- list(bd.result, yule.result, ddl.result, AIC.vector, deltaAIC.vector, AkaikeWeight.vector)
+	deltaAIC.vector <- AIC.vector-min(AIC.vector)
+	AkaikeWeight.vector <-Weights(AIC.vector)
+	result.list <- list(bd.result, yule.result, ddl.result, AIC.vector, deltaAIC.vector,AkaikeWeight.vector)
 	return(result.list)
 }
