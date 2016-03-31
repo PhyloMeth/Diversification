@@ -7,16 +7,15 @@ tree <- read.tree("Eurycea_Tree")
 tree <- chronos(tree, lambda=0)
 
 # Add node labels.
-tree$node.labels=c(1:tree$Nnode)
+makeNodeLabel(tree,method='number')
 
 plot(tree)
 nodelabels(tree$node.labels)
 
 #First, let's look at a sister group comparison. Imagine you have one clade you think is especially noteworthy. 
-
-focal.clade <- tips(tree,node=26)
+focal.clade <- tips(tree,node=58)
 ntax.focal.clade <- length(focal.clade)
-sister.clade <- tips(tree,node=17)
+sister.clade <- tips(tree,node=49)
 ntax.sister.clade <- length(sister.clade)
 depth.both <- findMRCA(tree,tips=c(ntax.focal.clade,ntax.sister.clade)) #time of the MRCA
 actual.ratio <- min(c(ntax.focal.clade, ntax.sister.clade)) / max(c(ntax.focal.clade, ntax.sister.clade))
@@ -38,16 +37,19 @@ hist(sim.ratios, breaks=100, col="black", main=paste("Fraction of simulations wi
 abline(v=actual.ratio, col="red")
 
 #So, what does this mean about your observed result? What's the p-value?
+# Well, the simulated results are really messy and don't follow the shape of a
+# typical distribution. Probably because of my tree size. The p value would be 
+# 0.5451.
 
 #Now, try fitting different models for diversification.
 div.results <- TryMultipleDivModels(tree)
 
-best.model <- div.results[div.results[[5]]==0]
+best.model <- div.results[div.results[[5]]==0][[1]]
 
 # What are the parameters of the best model? What do you think they mean?
 
-
-_____________________________________
+# The best model was a Yule model, which has a single parameter (lambda)--
+# the speciation rate. It's a 'pure birth' model.
 
 # Now try running BAMM. Use the tutorial at http://bamm-project.org/quickstart.html to do diversification analyses.
 
