@@ -1,12 +1,19 @@
 #You can use code you wrote for the correlation exercise here.
 source("DiversificationFunctions.R")
-tree <- read.tree("____PATH_TO_TREE_OR_SOME_OTHER_WAY_OF_GETTING_A_TREE____")
+setwd("~/Desktop/UTK/Spring_2016/PhyloMeth/Diversification")
+tree <- read.tree("Eurycea_Tree")
+
+# Make ultrametric.
+tree <- chronos(tree, lambda=0)
+plot(tree)
 
 #First, let's look at a sister group comparison. Imagine you have one clade you think is especially noteworthy. 
 
-ntax.focal.clade <- ___________________
-ntax.sister.clade <- __________________
-depth.both <- ____________ #time of the MRCA
+focal.clade <- c(16,19,28,14,6)
+ntax.focal.clade <- length(c(16,19,28,14,6))
+sister.clade <- c(15,7,2)
+ntax.sister.clade <- length(c(15,7,2))
+depth.both <- findMRCA(tree,tips=c(ntax.focal.clade,ntax.sister.clade)) #time of the MRCA
 actual.ratio <- min(c(ntax.focal.clade, ntax.sister.clade)) / max(c(ntax.focal.clade, ntax.sister.clade))
 
 estimated.div.rate <- log(ntax.focal.clade + ntax.sister.clade)/depth.both #N(t) = N0 * exp(r*t)
@@ -30,7 +37,7 @@ abline(v=actual.ratio, col="red")
 #Now, try fitting different models for diversification.
 div.results <- TryMultipleDivModels(tree)
 
-best.model <- __________________
+best.model <- div.results[div.results[[5]]==0]
 
 # What are the parameters of the best model? What do you think they mean?
 
