@@ -5,14 +5,19 @@ tree <- read.tree("Eurycea_Tree")
 
 # Make ultrametric.
 tree <- chronos(tree, lambda=0)
+
+# Add node labels.
+tree$node.labels=c(1:tree$Nnode)
+
 plot(tree)
+nodelabels(tree$node.labels)
 
 #First, let's look at a sister group comparison. Imagine you have one clade you think is especially noteworthy. 
 
-focal.clade <- c(16,19,28,14,6)
-ntax.focal.clade <- length(c(16,19,28,14,6))
-sister.clade <- c(15,7,2)
-ntax.sister.clade <- length(c(15,7,2))
+focal.clade <- tips(tree,node=26)
+ntax.focal.clade <- length(focal.clade)
+sister.clade <- tips(tree,node=17)
+ntax.sister.clade <- length(sister.clade)
 depth.both <- findMRCA(tree,tips=c(ntax.focal.clade,ntax.sister.clade)) #time of the MRCA
 actual.ratio <- min(c(ntax.focal.clade, ntax.sister.clade)) / max(c(ntax.focal.clade, ntax.sister.clade))
 
