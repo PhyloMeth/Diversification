@@ -6,7 +6,7 @@ tree <- read.tree("____PATH_TO_TREE_OR_SOME_OTHER_WAY_OF_GETTING_A_TREE____")
 
 ntax.focal.clade <- ___________________
 ntax.sister.clade <- __________________
-depth.both <- ____________ #time of the MRCA
+depth.both <- branching.times(tree)[as.character(getMRCA())] #time of the MRCA
 actual.ratio <- min(c(ntax.focal.clade, ntax.sister.clade)) / max(c(ntax.focal.clade, ntax.sister.clade))
 
 estimated.div.rate <- log(ntax.focal.clade + ntax.sister.clade)/depth.both #N(t) = N0 * exp(r*t)
