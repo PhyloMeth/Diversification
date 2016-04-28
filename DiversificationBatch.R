@@ -1,6 +1,7 @@
 #You can use code you wrote for the correlation exercise here.
-source("DiversificationFunctions.R")
+
 setwd("~/Desktop/UTK/Spring_2016/PhyloMeth/Diversification")
+source("DiversificationFunctions.R")
 tree <- read.tree("Eurycea_Tree")
 
 # Make ultrametric.
@@ -52,4 +53,3 @@ best.model <- div.results[div.results[[5]]==0][[1]]
 # the speciation rate. It's a 'pure birth' model.
 
 # Now try running BAMM. Use the tutorial at http://bamm-project.org/quickstart.html to do diversification analyses.
-
