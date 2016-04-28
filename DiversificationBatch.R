@@ -1,41 +1,46 @@
 #You can use code you wrote for the correlation exercise here.
-source("DiversificationFunctions.R")
-tree <- read.tree("____PATH_TO_TREE_OR_SOME_OTHER_WAY_OF_GETTING_A_TREE____")
+source("~/phyloMeth.packages/Diversification/DiversificationFunctions.R")
+tree <- read.tree("~/R/Vascular_Plants_rooted.dated.tre")
+ploidy.data <- read.csv(file="~/Documents/Data/ploidy.data.txt", stringsAsFactors=FALSE, row.names=1) #death to factors.
 
-#First, let's look at a sister group comparison. Imagine you have one clade you think is especially noteworthy. 
+cleaned.discrete <- treedata(tree, ploidy.data, sort=TRUE)
 
-ntax.focal.clade <- ___________________
-ntax.sister.clade <- __________________
-depth.both <- ____________ #time of the MRCA
-actual.ratio <- min(c(ntax.focal.clade, ntax.sister.clade)) / max(c(ntax.focal.clade, ntax.sister.clade))
+VisualizeData(tree, cleaned.discrete)
+dat <- cleaned.discrete$data[,1]
+#First, let's use parsimony to look at ancestral states
+cleaned.discrete.phyDat <- phyDat(data=dat, type="USER", levels=c("2", "3", "4", "6", "8", "12")) #phyDat is a data format used by phangorn
 
-estimated.div.rate <- log(ntax.focal.clade + ntax.sister.clade)/depth.both #N(t) = N0 * exp(r*t)
+anc.p <- ancestral.pars(cleaned.discrete$phy, cleaned.discrete.phyDat, type="ACCTRAN")
+plotAnc(tree=cleaned.discrete$phy, data=anc.p, i=1, cex.pie=0.05, cex=0.08, edge.width=0.4, pos = "topleft")
 
-nsim <- 10000
-sim.ratios <- rep(NA, nsim)
-for (i in sequence(nsim)) {
-	left.clade <- sim.bd(b=estimated.div.rate, times=depth.both)[2,2] #get the number of taxa. We're assuming a pure birth model. This is dumb: if there's one thing we know about life, it's that extinction happens. But it's convenient for this case. This is known as a Yule model.
-	right.clade <- sim.bd(b=estimated.div.rate, times=depth.both)[2,2] 
-	sim.ratios[i] <- min(c(left.clade, right.clade)) / max(c(left.clade, right.clade))
-	if(i%%500==0) {
-		print(paste("Now", 100*i/nsim, "percent done"))	
-	}
-}
+#Do you see any uncertainty? What does that meean for parsimony?
 
-hist(sim.ratios, breaks=100, col="black", main=paste("Fraction of simulations with more disparity is", ecdf(sim.ratios)(actual.ratio)))
-abline(v=actual.ratio, col="red")
+#now plot the likelihood reconstruction
+anc.ml <- ancestral.pml(pml(cleaned.discrete$phy, cleaned.discrete.phyDat), type="ml")
+plotAnc(cleaned.discrete$phy, anc.ml, 1)
 
-#So, what does this mean about your observed result? What's the p-value?
+#How does this differ from parsimony? 
+#Why does it differ from parsimony?
+#What does uncertainty mean?
 
-#Now, try fitting different models for diversification.
-div.results <- TryMultipleDivModels(tree)
+#How many changes are there in your trait under parsimony? 
+parsimony.score <- parsimony(cleaned.discrete$phy, cleaned.discrete.phyDat)
+print(parsimony.score)
 
-best.model <- __________________
+#Can you estimate the number of changes under a likelihood-based model? 
 
-# What are the parameters of the best model? What do you think they mean?
+#Well, we could look at branches where the reconstructed state changed from one end to the other. But that's not really a great approach: at best, it will underestimate the number of changes (we could have a change on a branch, then a change back, for example). A better approach is to use stochastic character mapping.
 
+estimated.histories <- make.simmap(cleaned.discrete$phy, cleaned.discrete$data[,1], model="ARD", nsim=5)
 
-_____________________________________
+#always look to see if it seems reasonable
+plotSimmap(estimated.histories)
 
-# Now try running BAMM. Use the tutorial at http://bamm-project.org/quickstart.html to do diversification analyses.
+counts <- countSimmap(estimated.histories)
+print(counts)
+
+#Depending on your biological question, investigate additional approaches:
+#  As in the correlation week, where hypotheses were examined by constraining rate matrices, one can constrain rates to examine hypotheses. corHMM, ape, and other packages have ways to address this.
+#  Rates change over time, and this could be relevant to a biological question: have rates sped up post KT, for example. Look at the models in geiger for ways to do this.
+#  You might observe rates for one trait but it could be affected by some other trait: you only evolve wings once on land, for example. corHMM can help investigate this.
 
