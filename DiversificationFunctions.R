@@ -1,16 +1,17 @@
 library(ape)
 library(geiger) 
-library(corHMM)
+library(laser)
 library(phytools)
-library(phangorn)
+library(MuMIn)
 
-#You can use code you wrote for the correlation exercise here.
-
-
-VisualizeData <- function(phy, data) {
-	#Important here is to LOOK at your data before running it. Any weird values? Does it all make sense? What about your tree? Polytomies?
-}
-
-CleanData <- function(phy, data) {
-	#treedata() in Geiger is probably my favorite function in R.
+TryMultipleDivModels <- function(tree) {
+  tree.branching <- getBtimes(string=write.tree(tree))
+  yule.result <- pureBirth(tree.branching)
+  bd.result <- bd(tree.branching)
+  ddl.result <- DDL(tree.branching)
+  AIC.vector <- c(yule.result$aic, bd.result$aic, ddl.result$aic)
+  deltaAIC.vector <- AIC.vector-min(AIC.vector)
+  AkaikeWeight.vector <- Weights(AIC.vector)
+  result.list <- list(bd.result, yule.result, ddl.result, AIC.vector, deltaAIC.vector, AkaikeWeight.vector)
+  return(result.list)
 }
