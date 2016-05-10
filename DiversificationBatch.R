@@ -1,5 +1,5 @@
 #You can use code you wrote for the correlation exercise here.
-source("DiversificationFunctions.R")
+source("E:/SCHOOL/Documents-School/Class/EEB_603_PhyloMeth/Repository2/Diversification/DiversificationFunctions.R")
 # tree <- read.tree("____PATH_TO_TREE_OR_SOME_OTHER_WAY_OF_GETTING_A_TREE____")
 data(whales)
 tree <- whales
@@ -31,14 +31,13 @@ abline(v=actual.ratio, col="red")
 #Now, try fitting different models for diversification.
 div.results <- TryMultipleDivModels(tree)
 
-best.model <- (result.list$AIC)
+best.model <- (result.list$AIC) # in my analysis ddl turned out to have the lowest AIC. return(result.list) is not saving anything to my global environment, but print() at least presents the data.
 names(best.model) <- c("yule", "bd", "ddl")
 
 best.model
 # What are the parameters of the best model? What do you think they mean?
 
-
-_____________________________________
+# The parameter of ddl include the initial speciation rate and the K parameter which corresponds to carrying capacity. This model puts into consideration the implcations of higher diversity in a lineage in the context of the ecosystem.
 
 # Now try running BAMM. Use the tutorial at http://bamm-project.org/quickstart.html to do diversification analyses.
 

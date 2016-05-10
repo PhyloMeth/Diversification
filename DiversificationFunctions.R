@@ -14,5 +14,7 @@ TryMultipleDivModels <- function(tree) {
 	rel.likelihood.vector <- exp(-.5 * deltaAIC.vector)
 	AkaikeWeight.vector <- rel.likelihood.vector/sum(rel.likelihood.vector)
 	result.list <- list(yule=yule.result, bd=bd.result, ddl=ddl.result, AIC=AIC.vector, deltAIC=deltaAIC.vector, Akaike=AkaikeWeight.vector)
+	print(result.list)
 	return(result.list)
+	
 }
